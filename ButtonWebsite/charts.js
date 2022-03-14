@@ -68,7 +68,8 @@ function buildCharts(sample) {
     firstMeta = metaResult[0];
     // 6. Create variables that hold the otu_ids, otu_labels, and sample_values.
     var {otu_ids, otu_labels, sample_values} = result;
-    var washFreq = firstMeta.parseFloat(freq => freq.wfreq);
+    var frequency = firstMeta.wfreq;
+    var washFreq = parseFloat(frequency);
     // 7. Create the yticks for the bar chart.
     // Hint: Get the the top 10 otu_ids and map them in descending order  
     //  so the otu_ids with the most bacteria are last. 
@@ -120,16 +121,37 @@ function buildCharts(sample) {
 
     // 4. Create the trace for the gauge chart.
     var gaugeData = [
+      {
+        value:washFreq,
+        type: "indicator",
+        mode:"gauge+number",
+        title: {text: "Wash Frequency"},
+        gauge: {
+          axis: {range: [0,10]},
+          color: "black",
+          steps: [
+            {range: [0,2], color: "red" },
+            {range: [2,4], color: "orange"},
+            {range: [4,6], color: "yellow"},
+            {range: [6,8], color: "lime"},
+            {range: [8,10], color: "green"}
+
+          ]
+        }
+      
+      }
      
     ];
         
     // 5. Create the layout for the gauge chart.
-    var gaugeLayout = { 
+    var gaugeLayout = {
+      width: 500, 
+      height: 400, 
+      margin: { t: 0, b: 0 } };
          
-    };
     
     // 6. Use Plotly to plot the gauge data and layout.
-    Plotly.newPlot();
+    Plotly.newPlot("gauge", gaugeData, gaugeLayout);
   });
 }
 
